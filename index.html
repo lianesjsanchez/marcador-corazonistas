@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#173b70">
+<title>Marcador Corazonistas</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:18px;background:#eef2f8;
+font-family:Arial,sans-serif;color:#173b70}
+header{text-align:center;background:#173b70;color:white;
+padding:22px;border-radius:18px;margin-bottom:16px}
+.crest{font-size:42px}
+header h1{font-size:23px;margin:8px 0}
+header p{margin:4px;font-size:13px}
+.card{background:white;border-radius:16px;padding:16px;
+margin-bottom:14px;box-shadow:0 2px 9px #00000012}
+input{width:100%;padding:12px;border:1px solid #ccd5e2;
+border-radius:9px;font-size:16px;text-align:center}
+.names{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.global{text-align:center;background:#173b70;color:white}
+.global h2{font-size:14px;margin:0 0 12px}
+.score{display:flex;justify-content:space-around;
+align-items:center;font-size:44px;font-weight:bold}
+.score small{display:block;font-size:13px;font-weight:normal}
+.period{text-align:center}
+.period h3{margin:0 0 12px}
+.teams{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.team strong{display:block;font-size:32px;margin:8px}
+.buttons{display:flex;justify-content:center;gap:10px}
+button{border:0;border-radius:10px;padding:12px 18px;
+font-size:22px;font-weight:bold;cursor:pointer}
+.plus{background:#173b70;color:white}
+.minus{background:#e8edf5;color:#173b70}
+.total{font-weight:bold}
+.reset{width:100%;background:#fce5e5;color:#a32121;
+font-size:15px;margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+<div class="crest">✝️</div>
+<h1>CORAZONISTAS</h1>
+<p>LA MINA · ZARAGOZA</p>
+<p>MARCADOR DE BALONMANO</p>
+</header>
+
+<div class="card names">
+<input id="name1" value="Corazonistas" aria-label="Equipo local">
+<input id="name2" value="Rival" aria-label="Equipo visitante">
+</div>
+
+<div class="card global">
+<h2>RESULTADO GLOBAL</h2>
+<div class="score">
+<div><span id="global1">0</span><small id="label1">Corazonistas</small></div>
+<span>:</span>
+<div><span id="global2">0</span><small id="label2">Rival</small></div>
+</div>
+</div>
+
+<div id="periods"></div>
+
+<div class="card">
+<h3>RESUMEN DEL PARTIDO</h3>
+<div id="summary"></div>
+</div>
+
+<button class="reset" onclick="resetGame()">REINICIAR PARTIDO</button>
+
+<script>
+let data = JSON.parse(localStorage.getItem("corazonistas")) ||
+  {scores:[[0,0],[0,0],[0,0],[0,0]],names:["Corazonistas","Rival"]};
+
+const names = [document.getElementById("name1"),
+               document.getElementById("name2")];
+
+names.forEach((el,i)=>{
+  el.value=data.names[i];
+  el.addEventListener("input",()=>{
+    data.names[i]=el.value;
+    save();
+  });
+});
+
+function save(){
+  localStorage.setItem("corazonistas",JSON.stringify(data));
+  render();
+}
+
+function change(period,team,amount){
+  data.scores[period][team]=Math.max(0,
+    data.scores[period][team]+amount);
+  save();
+}
+
+function render(){
+  let totals=[0,0];
+  data.scores.forEach(s=>{
+    totals[0]+=s[0];
+    totals[1]+=s[1];
+  });
+
+  document.getElementById("global1").textContent=totals[0];
+  document.getElementById("global2").textContent=totals[1];
+  document.getElementById("label1").textContent=data.names[0];
+  document.getElementById("label2").textContent=data.names[1];
+
+  document.getElementById("periods").innerHTML=
+    data.scores.map((s,i)=>`
+    <div class="card period">
+      <h3>${i+1}º TIEMPO · 10 MINUTOS</h3>
+      <div class="teams">
+        ${[0,1].map(t=>`
+          <div class="team">
+            <div>${escapeHTML(data.names[t])}</div>
+            <strong>${s[t]}</strong>
+            <div class="buttons">
+              <button class="minus" onclick="change(${i},${t},-1)">−</button>
+              <button class="plus" onclick="change(${i},${t},1)">+</button>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </div>`).join("");
+
+  document.getElementById("summary").innerHTML=
+    data.scores.map((s,i)=>
+    `<p>${i+1}º tiempo: <b>${s[0]} - ${s[1]}</b></p>`
+    ).join("")+
+    `<hr><p class="total">TOTAL: ${totals[0]} - ${totals[1]}</p>`;
+}
+
+function escapeHTML(s){
+  return String(s).replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function resetGame(){
+  if(confirm("¿Quieres borrar todos los goles y empezar otro partido?")){
+    data.scores=[[0,0],[0,0],[0,0],[0,0]];
+    save();
+  }
+}
+
+render();
+</script>
+</body>
+</html>
