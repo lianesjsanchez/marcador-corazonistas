@@ -2,84 +2,205 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#173b70">
 <title>Marcador Corazonistas</title>
+
 <style>
+:root{--blue:#173b70;--bg:#eef2f8;--red:#a32121}
 *{box-sizing:border-box}
-body{margin:0;padding:18px;background:#eef2f8;
-font-family:Arial,sans-serif;color:#173b70}
-header{text-align:center;background:#173b70;color:white;
-padding:22px;border-radius:18px;margin-bottom:16px}
-.crest{font-size:42px}
-header h1{font-size:23px;margin:8px 0}
-header p{margin:4px;font-size:13px}
-.card{background:white;border-radius:16px;padding:16px;
-margin-bottom:14px;box-shadow:0 2px 9px #00000012}
-input{width:100%;padding:12px;border:1px solid #ccd5e2;
-border-radius:9px;font-size:16px;text-align:center}
-.names{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.global{text-align:center;background:#173b70;color:white}
-.global h2{font-size:14px;margin:0 0 12px}
-.score{display:flex;justify-content:space-around;
-align-items:center;font-size:44px;font-weight:bold}
-.score small{display:block;font-size:13px;font-weight:normal}
-.period{text-align:center}
-.period h3{margin:0 0 12px}
-.teams{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.team strong{display:block;font-size:32px;margin:8px}
-.buttons{display:flex;justify-content:center;gap:10px}
-button{border:0;border-radius:10px;padding:12px 18px;
-font-size:22px;font-weight:bold;cursor:pointer}
-.plus{background:#173b70;color:white}
-.minus{background:#e8edf5;color:#173b70}
-.total{font-weight:bold}
-.reset{width:100%;background:#fce5e5;color:#a32121;
-font-size:15px;margin-top:8px}
+html,body{height:100%;margin:0}
+body{padding:clamp(6px,1.2vw,14px);background:var(--bg);font-family:Arial,sans-serif;color:var(--blue);overflow:hidden}
+.app{height:100%;max-width:1500px;margin:auto;display:grid;grid-template-rows:auto auto auto minmax(0,1fr) auto;gap:clamp(4px,.65vh,8px);min-height:0}
+header{background:var(--blue);color:white;border-radius:14px;padding:7px 14px;display:flex;align-items:center;justify-content:center;gap:14px;text-align:left}
+header .crest{font-size:42px}
+header h1{font-size:clamp(17px,2.2vh,24px);margin:0 0 3px}
+header p{font-size:clamp(9px,1.2vh,12px);margin:2px 0}
+.top{display:grid;grid-template-columns:minmax(180px,1fr) minmax(220px,1.2fr);gap:8px;min-height:0}
+.card{background:white;border-radius:12px;padding:clamp(7px,1vh,12px);box-shadow:0 2px 8px #00000010;min-width:0}
+.names{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-content:center}
+input{width:100%;min-width:0;padding:9px 5px;border:1px solid #ccd5e2;border-radius:8px;font-size:clamp(12px,1.6vh,16px);text-align:center;color:var(--blue)}
+.global{background:var(--blue);color:white;text-align:center;display:flex;flex-direction:column;justify-content:center}
+.global h2{font-size:clamp(10px,1.3vh,14px);margin:0 0 3px}
+.score{display:flex;justify-content:space-evenly;align-items:center;font-size:clamp(27px,5vh,48px);font-weight:bold;line-height:1}
+.score small{display:block;font-size:clamp(9px,1.2vh,13px);font-weight:normal;margin-top:4px;max-width:28vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.main-timer{display:flex;align-items:center;justify-content:center;gap:clamp(10px,3vw,28px);padding:5px 10px;min-height:0}
+.main-timer h2{font-size:clamp(10px,1.4vh,14px);margin:0;white-space:nowrap}
+.main-clock{font-size:clamp(27px,4.5vh,44px);font-weight:bold;font-variant-numeric:tabular-nums;line-height:1;min-width:112px;text-align:center}
+.timer-controls{display:flex;gap:5px;justify-content:center;flex-wrap:nowrap}
+.timer-controls button{padding:6px 10px;font-size:clamp(10px,1.3vh,13px)}
+.timer-controls button:disabled{opacity:.45;cursor:default}
+.periods{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;min-height:0}
+.period{display:flex;flex-direction:column;justify-content:center;text-align:center;min-height:0}
+.period h3{font-size:clamp(11px,1.5vh,16px);margin:0 0 5px}
+.teams{display:grid;grid-template-columns:1fr 1fr;gap:6px;min-height:0}
+.team{min-width:0}
+.team-name{font-size:clamp(10px,1.4vh,14px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.team strong{display:block;font-size:clamp(22px,4vh,38px);margin:2px}
+.buttons{display:flex;justify-content:center;gap:7px}
+.buttons button{min-width:38px;padding:5px 12px;font-size:clamp(17px,2.5vh,24px)}
+.summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 12px}
+.summary h3{font-size:clamp(10px,1.3vh,14px);margin:0 8px 0 0;white-space:nowrap}
+.summary-lines{display:flex;gap:clamp(7px,2vw,24px);align-items:center;justify-content:center;flex:1;min-width:0;font-size:clamp(9px,1.2vh,12px);white-space:nowrap}
+.total{font-weight:bold;font-size:clamp(11px,1.5vh,15px);white-space:nowrap}
+.reset{background:#fce5e5;color:var(--red);font-size:clamp(10px,1.2vh,13px);padding:7px 10px;white-space:nowrap}
+
+button{border:0;border-radius:8px;cursor:pointer;font-weight:bold}
+.primary{background:var(--blue);color:white}
+.secondary{background:#e8edf5;color:var(--blue)}
+
+@media(max-width:600px){
+ body{padding:5px}
+ .app{gap:5px;grid-template-rows:auto auto auto minmax(0,1fr) auto}
+ header{padding:5px 8px;gap:8px}
+ header .crest{font-size:32px}
+ header h1{font-size:16px}
+ header p{font-size:9px}
+ .top{grid-template-columns:1fr 1fr;gap:5px}
+ .card{padding:6px;border-radius:9px}
+ .names{gap:5px}
+ input{padding:8px 2px;font-size:12px}
+ .global h2{font-size:10px}
+ .score{font-size:30px}
+ .score small{font-size:9px}
+ .main-timer{gap:9px;padding:5px 6px}
+ .main-timer h2{font-size:10px}
+ .main-clock{font-size:28px;min-width:82px}
+ .timer-controls{gap:3px}
+ .timer-controls button{padding:5px 6px;font-size:9px}
+ button{padding:6px 8px;font-size:11px}
+ .periods{gap:5px}
+ .period h3{font-size:11px;margin-bottom:3px}
+ .team-name{font-size:10px}
+ .team strong{font-size:25px;margin:1px}
+ .buttons{gap:5px}
+ .buttons button{min-width:31px;padding:3px 9px;font-size:18px}
+ .summary{gap:4px;padding:5px 7px;flex-wrap:nowrap;justify-content:space-between}
+ .summary h3{font-size:9px}
+ .summary-lines{gap:5px;font-size:8px;order:0;width:auto;flex:1;flex-basis:auto;justify-content:center}
+ .total{font-size:11px}
+ .reset{font-size:8px;padding:5px 6px}
+}
+@media(max-height:620px){
+ .app{gap:4px}
+ header{padding:4px 10px}
+ header .crest{font-size:28px}
+ .card{padding:5px}
+ .period h3{margin-bottom:2px}
+ .team strong{font-size:22px}
+ .buttons button{padding:2px 9px}
+}
+@media(max-width:380px){
+ body{padding:3px}
+ .app{gap:3px}
+ header{padding:3px 6px}
+ header .crest{font-size:25px}
+ header h1{font-size:14px}
+ header p{font-size:8px}
+ .top{gap:3px}
+ .card{padding:4px}
+ input{padding:6px 1px;font-size:11px}
+ .score{font-size:26px}
+ .main-timer{gap:5px;padding:3px}
+ .main-timer h2{font-size:9px}
+ .main-clock{font-size:25px;min-width:72px}
+ .timer-controls button{padding:4px 5px;font-size:8px}
+ .periods{gap:3px}
+ .period h3{font-size:10px}
+ .team-name{font-size:9px}
+ .team strong{font-size:22px}
+ .buttons button{min-width:28px;padding:2px 7px;font-size:17px}
+ .summary{gap:3px;padding:4px}
+ .summary-lines{gap:4px;font-size:7px}
+ .total{font-size:9px}
+ .reset{font-size:7px;padding:4px}
+}
+@media(max-height:700px){
+ header{padding:4px 8px}
+ header .crest{font-size:28px}
+ .card{padding:5px}
+ .main-timer{padding:3px 6px}
+ .main-clock{font-size:clamp(23px,4vh,36px)}
+ .period h3{margin-bottom:2px}
+ .team strong{font-size:clamp(19px,3.2vh,29px)}
+ .buttons button{padding:2px 8px}
+ .summary{padding:4px 7px}
+}
 </style>
 </head>
+
 <body>
+<div class="app">
+
 <header>
-<img src="logo-corazonistas.png"
-     alt="Corazonistas"
-     style="width:90px;height:90px;object-fit:contain;">
-<h1>CORAZONISTAS</h1>
-<p>LA MINA · ZARAGOZA</p>
-<p>MARCADOR DE BALONMANO</p>
+  <div class="crest">❤️</div>
+  <div>
+    <h1>CORAZONISTAS</h1>
+    <p>LA MINA · ZARAGOZA</p>
+    <p>MARCADOR DE BALONMANO</p>
+  </div>
 </header>
 
-<div class="card names">
-<input id="name1" value="Corazonistas" aria-label="Equipo local">
-<input id="name2" value="Rival" aria-label="Equipo visitante">
+<div class="top">
+  <div class="card names">
+    <input id="name1" value="Corazonistas" aria-label="Equipo local" maxlength="24">
+    <input id="name2" value="Rival" aria-label="Equipo visitante" maxlength="24">
+  </div>
+  <div class="card global">
+    <h2>RESULTADO GLOBAL</h2>
+    <div class="score">
+      <div><span id="global1">0</span><small id="label1">Corazonistas</small></div>
+      <span>:</span>
+      <div><span id="global2">0</span><small id="label2">Rival</small></div>
+    </div>
+  </div>
 </div>
 
-<div class="card global">
-<h2>RESULTADO GLOBAL</h2>
-<div class="score">
-<div><span id="global1">0</span><small id="label1">Corazonistas</small></div>
-<span>:</span>
-<div><span id="global2">0</span><small id="label2">Rival</small></div>
-</div>
-</div>
-
-<div id="periods"></div>
-
-<div class="card">
-<h3>RESUMEN DEL PARTIDO</h3>
-<div id="summary"></div>
+<div class="card main-timer">
+  <h2>TEMPORIZADOR</h2>
+  <div class="main-clock" id="mainClock">10:00</div>
+  <div class="timer-controls">
+    <button class="primary" id="timerStart" onclick="startTimer()">INICIAR</button>
+    <button class="secondary" id="timerPause" onclick="pauseTimer()" disabled>PAUSA</button>
+    <button class="secondary" onclick="resetTimer()">REINICIAR</button>
+  </div>
 </div>
 
-<button class="reset" onclick="resetGame()">REINICIAR PARTIDO</button>
+<div class="periods" id="periods"></div>
+
+<div class="card summary">
+  <h3>RESUMEN</h3>
+  <div class="summary-lines" id="summary"></div>
+  <div class="total" id="total">TOTAL: 0 - 0</div>
+  <button class="reset" onclick="resetGame()">REINICIAR PARTIDO</button>
+</div>
+
+</div>
 
 <script>
-let data = JSON.parse(localStorage.getItem("corazonistas")) ||
-  {scores:[[0,0],[0,0],[0,0],[0,0]],names:["Corazonistas","Rival"]};
+const STORAGE_KEY="corazonistas";
+const TIMER_STORAGE_KEY="corazonistas_timer_single";
 
-const names = [document.getElementById("name1"),
-               document.getElementById("name2")];
+let data=JSON.parse(localStorage.getItem(STORAGE_KEY))||{
+  scores:[[0,0],[0,0],[0,0],[0,0]],
+  names:["Corazonistas","Rival"]
+};
 
-names.forEach((el,i)=>{
-  el.value=data.names[i];
+if(!Array.isArray(data.scores)||data.scores.length!==4){
+  data.scores=[[0,0],[0,0],[0,0],[0,0]];
+}
+
+if(!Array.isArray(data.names)){
+  data.names=["Corazonistas","Rival"];
+}
+
+const nameInputs=[
+  document.getElementById("name1"),
+  document.getElementById("name2")
+];
+
+nameInputs.forEach((el,i)=>{
+  el.value=data.names[i]||(i===0?"Corazonistas":"Rival");
   el.addEventListener("input",()=>{
     data.names[i]=el.value;
     save();
@@ -87,18 +208,31 @@ names.forEach((el,i)=>{
 });
 
 function save(){
-  localStorage.setItem("corazonistas",JSON.stringify(data));
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
   render();
 }
 
 function change(period,team,amount){
-  data.scores[period][team]=Math.max(0,
-    data.scores[period][team]+amount);
+  data.scores[period][team]=Math.max(
+    0,
+    data.scores[period][team]+amount
+  );
   save();
 }
 
+function escapeHTML(s){
+  return String(s).replace(/[&<>"']/g,c=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[c]));
+}
+
 function render(){
-  let totals=[0,0];
+  const totals=[0,0];
+
   data.scores.forEach(s=>{
     totals[0]+=s[0];
     totals[1]+=s[1];
@@ -111,44 +245,176 @@ function render(){
 
   document.getElementById("periods").innerHTML=
     data.scores.map((s,i)=>`
-    <div class="card period">
-      <h3>${i+1}º TIEMPO · 10 MINUTOS</h3>
-      <div class="teams">
-        ${[0,1].map(t=>`
-          <div class="team">
-            <div>${escapeHTML(data.names[t])}</div>
-            <strong>${s[t]}</strong>
-            <div class="buttons">
-              <button class="minus" onclick="change(${i},${t},-1)">−</button>
-              <button class="plus" onclick="change(${i},${t},1)">+</button>
+      <div class="card period">
+        <h3>${i+1}º TIEMPO</h3>
+        <div class="teams">
+          ${[0,1].map(t=>`
+            <div class="team">
+              <div class="team-name">${escapeHTML(data.names[t])}</div>
+              <strong>${s[t]}</strong>
+              <div class="buttons">
+                <button class="secondary" aria-label="Restar gol"
+                  onclick="change(${i},${t},-1)">−</button>
+                <button class="primary" aria-label="Sumar gol"
+                  onclick="change(${i},${t},1)">+</button>
+              </div>
             </div>
-          </div>
-        `).join("")}
+          `).join("")}
+        </div>
       </div>
-    </div>`).join("");
+    `).join("");
 
   document.getElementById("summary").innerHTML=
     data.scores.map((s,i)=>
-    `<p>${i+1}º tiempo: <b>${s[0]} - ${s[1]}</b></p>`
-    ).join("")+
-    `<hr><p class="total">TOTAL: ${totals[0]} - ${totals[1]}</p>`;
-}
+      `<span>${i+1}º: <b>${s[0]}-${s[1]}</b></span>`
+    ).join("");
 
-function escapeHTML(s){
-  return String(s).replace(/[&<>"']/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",
-    '"':"&quot;","'":"&#39;"
-  }[c]));
+  document.getElementById("total").textContent=
+    `TOTAL: ${totals[0]} - ${totals[1]}`;
 }
 
 function resetGame(){
-  if(confirm("¿Quieres borrar todos los goles y empezar otro partido?")){
-    data.scores=[[0,0],[0,0],[0,0],[0,0]];
-    save();
-  }
+  if(!window.confirm(
+    "¿Quieres reiniciar el partido? Se borrarán los goles y el temporizador volverá a 10:00."
+  )) return;
+
+  data.scores=[[0,0],[0,0],[0,0],[0,0]];
+  save();
+  resetTimer();
 }
 
+/* TEMPORIZADOR ÚNICO DE 10 MINUTOS */
+
+const TEN_MINUTES=10*60*1000;
+
+let timer={
+  remaining:TEN_MINUTES,
+  deadline:null,
+  running:false,
+  intervalId:null
+};
+
+function updateTimerDisplay(){
+  const seconds=Math.max(0,Math.ceil(timer.remaining/1000));
+  const mins=String(Math.floor(seconds/60)).padStart(2,"0");
+  const secs=String(seconds%60).padStart(2,"0");
+
+  document.getElementById("mainClock").textContent=`${mins}:${secs}`;
+
+  document.getElementById("timerStart").disabled=
+    timer.running||timer.remaining<=0;
+
+  document.getElementById("timerPause").disabled=
+    !timer.running;
+}
+
+function saveTimer(){
+  localStorage.setItem(TIMER_STORAGE_KEY,JSON.stringify({
+    remaining:timer.remaining,
+    running:timer.running,
+    deadline:timer.deadline
+  }));
+}
+
+function tickTimer(){
+  if(!timer.running)return;
+
+  timer.remaining=timer.deadline-Date.now();
+
+  if(timer.remaining<=0){
+    timer.remaining=0;
+    timer.running=false;
+    timer.deadline=null;
+
+    if(timer.intervalId)clearInterval(timer.intervalId);
+    timer.intervalId=null;
+
+    updateTimerDisplay();
+    saveTimer();
+    return;
+  }
+
+  updateTimerDisplay();
+}
+
+function startTimer(){
+  if(timer.running||timer.remaining<=0)return;
+
+  timer.running=true;
+  timer.deadline=Date.now()+timer.remaining;
+
+  if(timer.intervalId)clearInterval(timer.intervalId);
+
+  timer.intervalId=setInterval(tickTimer,200);
+
+  updateTimerDisplay();
+  saveTimer();
+}
+
+function pauseTimer(){
+  if(!timer.running)return;
+
+  timer.remaining=Math.max(0,timer.deadline-Date.now());
+  timer.running=false;
+  timer.deadline=null;
+
+  if(timer.intervalId)clearInterval(timer.intervalId);
+  timer.intervalId=null;
+
+  updateTimerDisplay();
+  saveTimer();
+}
+
+function resetTimer(){
+  timer.running=false;
+  timer.deadline=null;
+  timer.remaining=TEN_MINUTES;
+
+  if(timer.intervalId)clearInterval(timer.intervalId);
+  timer.intervalId=null;
+
+  updateTimerDisplay();
+  saveTimer();
+}
+
+function restoreTimer(){
+  try{
+    const saved=JSON.parse(
+      localStorage.getItem(TIMER_STORAGE_KEY)||"null"
+    );
+
+    if(saved&&saved.running&&Number(saved.deadline)>Date.now()){
+      timer.running=true;
+      timer.deadline=Number(saved.deadline);
+      timer.remaining=timer.deadline-Date.now();
+      timer.intervalId=setInterval(tickTimer,200);
+
+    }else if(saved&&saved.running){
+      timer.remaining=0;
+      timer.running=false;
+      timer.deadline=null;
+
+    }else if(saved){
+      timer.remaining=Math.max(
+        0,
+        Math.min(TEN_MINUTES,Number(saved.remaining)||0)
+      );
+      timer.running=false;
+      timer.deadline=null;
+    }
+  }catch(e){}
+
+  updateTimerDisplay();
+}
+
+document.addEventListener("visibilitychange",()=>{
+  if(!document.hidden&&timer.running){
+    tickTimer();
+  }
+});
+
 render();
+restoreTimer();
 </script>
 </body>
 </html>
